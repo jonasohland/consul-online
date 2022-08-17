@@ -21,6 +21,7 @@ use ureq::Request;
 
 #[derive(Debug)]
 pub enum Error {
+    General(String),
     UnixSocketUnsupported,
     InvalidBool(String),
     ReadCaCert(std::io::Error),
@@ -42,6 +43,7 @@ impl Display for Error {
     #[rustfmt::skip]
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Error::General(err) => write!(f, "error: {}", err),
             Error::UnixSocketUnsupported => write!(f, "unix sockets are not supported at the moment"),
             Error::InvalidBool(v) => write!(f, "environment variable could not be parsed as boolean: {}", v),
             Error::ReadCaCert(e) => write!(f, "could not read the ca certificate: {}", e),

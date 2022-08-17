@@ -13,7 +13,8 @@ USAGE:
 
 ARGS:
     <ADDRESS>    Address of the consul agent Examples: "127.0.0.1:8500" "http://127.0.0.1:8500"
-                 "https://localhost:8501" "http://my-domain.fail"
+                 "https://localhost:8501" "http://my-domain.fail". Can also be set with the
+                 CONSUL_HTTP_ADDR environment variable [default: localhost:8500]
 
 OPTIONS:
         --ca-cert <CA_CERT>
@@ -30,31 +31,38 @@ OPTIONS:
             Print help information
 
         --http-token <HTTP_TOKEN>
-            Consul access token, must have operator:read permissions
+            Consul access token, must have operator:read permissions. Can also be set with the
+            CONSUL_HTTP_TOKEN environment variable
 
         --http-token-file <HTTP_TOKEN_FILE>
-            File from which to read a consul access token, must have operator:read permissions
+            File from which to read a consul access token, must have operator:read permissions. Can
+            also be set with the CONSUL_HTTP_TOKEN_FILE environment variable
 
     -i, --interval <INTERVAL>
-            Polling interval
+            Polling interval in seconds. Can also be set via the CONSUL_ONLINE_INTERVAL environment
+            variable
 
     -l, --log-level <LOG_LEVEL>
             Application log level [default: WARN]
 
     -r, --reconnect
-            Do not treat connection failures as exit conditions
+            Do not treat connection failures as exit conditions. Can also be set via the
+            CONSUL_ONLINE_RECONNECT environment variable
 
         --skip-verify
             Skip server certificate validation. This is is dangerous and should be avoided! It might
-            be better to simply provide the consul ca certificate with the --ca-cert option
+            be better to simply provide the consul ca certificate with the --ca-cert option. This
+            option can also set by specifying CONSUL_HTTP_SSL_VERIFY=false in the environment
 
     -t, --timeout <TIMEOUT>
             Global timeout in seconds. Will stop trying to wait for consul to come online for at
             least this amount of time. Might wait longer, especially if the --reconnect option is
-            not specified
+            not specified Can also be set via the CONSUL_ONLINE_TIMEOUT environment variable
 
         --tls
-            Force TLS connection
+            Force TLS connection. Can also enabled by setting CONSUL_HTTP_SSL=true in the
+            environment
+
 
 ```
 
