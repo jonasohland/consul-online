@@ -65,7 +65,6 @@ impl Display for Error {
 
 type Result<T> = std::result::Result<T, Error>;
 
-
 #[derive(Debug)]
 pub struct Config {
     pub http_addr: String,
@@ -80,8 +79,6 @@ pub struct Config {
     pub http_token: Option<String>,
     pub http_token_file: Option<String>,
 }
-
-
 
 struct SkippingVerifier();
 
@@ -334,12 +331,17 @@ pub fn wait(config: Config) -> Result<()> {
                 200 => break Ok(()),
                 _ => {
                     log::info!("code: {}", code);
-                    continue;
                 }
             },
             Err(err) => match err {
                 Error::Request(ureq::Error::Status(s, r)) => {
-                    log::info!("not ready yet: {}/{}", r.status_text(), s);
+                    if s == 500 {
+                        log::info!("not ready yet: {}/{}", r.status_text(), s);
+                    } else if !config.reconnect {
+                        break Err(Error::Request(ureq::Error::Status(s, r)));
+                    } else {
+                        log::info!("request failed: {}", s);
+                    }
                 }
                 rest => {
                     if !config.reconnect {
